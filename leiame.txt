@@ -1,0 +1,57 @@
+--> Introdução:
+
+Neste arquivo será descrito a estratégia de solução que se propõe a encontrar uma sequência de cores para preencher o tabuleiro de uma instância do jogo Floodit.
+
+
+--> Definições Necessárias:
+
+Nesta seção serão dadas definições necessárias para o entendimento do resto do arquivo.
+
+- Seja I a estrutura que representa instância de um jogo, esta estrutura conterá as seguintes informações:
+    - Seja N o número de linhas do tabuleiro;
+    - Seja M o número de colunas do tabuleiro;
+    - O número de cores do tabuleiro;
+    - Uma matriz contendo o tabuleiro original;
+
+- Seja E a estrutura que representa o estado atual de um jogo, esta estrutura conterá as seguintes informações:
+    - Seja C a cor selecionada no estado, sempre igual a cor da primeira célula;
+    - Seja Q o número de células preenchidas até o momento;
+    - Um booleano informando se a última célula do tabuleiro foi preenchida;
+    - Seja D a menor distância entre as células preenchidas e a última (será zero caso a última tenha sido preenchida);
+    - Seja V um conjunto de cores vizinhas às células já preenchidas;
+    - Seja S a sequência de cores utilizadas a partir do tabuleiro original até a obtenção do estado E;
+    - Uma matriz booleana informando quais células já foram preenchidas até aquele momento;
+
+- Seja E' um estado gerado a partir do preenchimento com uma cor pertence a V que pertence a E;
+- Seja K o conjunto de todas as instâncias E' geradas a partir de E.
+
+
+--> O Problema:
+
+O jogo consiste em encontrar uma sequência S de cores válidas que ao serem aplicadas sobre a instância I resultará em um tabuleiro contendo todas suas células preenchidas com uma única cor.
+A cada aplicação de uma cor de S pintam-se todas as células adjacentes à primeira célula do tabuleiro desde que estas sejam da cor C selecionada, este processo se repete para as novas células pintadas até que nenhuma célula possa ser pintada.
+
+
+
+--> Estratégia de Implementação:
+
+Tendo em mente que a cada cor aplicada no tabuleiro será necessário pintar todas as células possíveis a partir da primeira célula, posição (0,0) no tabuleiro, a solução implementada se propõe a inicialmente conquistar a última célula do tabuleiro, presente na posição (M - 1, N - 1).
+
+Este resultado é obtido ao gerar, a cada iteração do programa, um conjunto K de novas instâncias a partir do estado original E. Para cada instância E' de K selecionamos a instância cujo valor D (menor distância até a última célula) seja o menor entre todas as instâncias de K, esta instância passa então a representar nosso novo estado E. Este  processo então se repete até que a última célula tenha sido conquistada.
+
+Com a última célula conquistada sabemos que a disposição das cores pintadas no mapa será muito semelhante à diagonal principal da matriz e desta forma podemos expandir as cores pintadas tanto em direção ao canto superior direito como em direção ao canto inferior esquerdo da matriz. Para que a expansão ocorra desta forma o novo critério de seleção de uma nova instância E descrita no parágrafo anterior deixa de ser o menor valor de D gerado e passa a ser o maior valor de Q (quantidade de células preenchidas) nas instâncias E' de K.
+
+
+--> Comentários adicionais:
+
+O programa foi desenvolvido utilizando a linguagem de programação C++ pela possibilidade de se usar valores binários que ocupam apenas 1 bit na memória, tornando baixa a preocupação pela limitação imposta de o programa rodar em até 8GB ao gerarmos os estados E' presentes em K.
+	
+
+--> Execução:
+
+Para executar o programa desenvolvido basta realizar os seguintes comandos no terminal:
+
+    make
+    ./main < "instancia_tabuleiro.txt"
+
+Onde "instancia_tabuleiro.txt" corresponde ao arquivo de entrada contendo em sua primeira linha 3 inteiros, sendo eles: número de linhas, número de colunas e número de cores do tabuleiro. Nas linhas seguintes é dado os valores de entrada da matriz que representa o tabuleiro.
